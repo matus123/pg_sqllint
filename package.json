@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "babel-node index.js"
+    "test": "NODE_ENV=test mocha tests/ --require babel-register -R spec -b --recursive",
+    "dev": "babel-node index.js --source-maps",
+    "debug": "DEBUG=* babel-node index.js --source-maps"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "babel-cli": "^6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.24.1",
+    "debug": "^2.6.7",
     "lodash": "^4.17.4",
     "pg-query-parser": "git+https://github.com/matus123/pg-query-parser.git",
     "traverse": "^0.6.6"
@@ -19,6 +21,7 @@
   "devDependencies": {
     "babel-eslint": "^7.2.3",
     "babel-register": "^6.24.1",
+    "chai": "^3.5.0",
     "eslint": "^3.19.0",
     "eslint-config-airbnb-base": "^11.1.3",
     "eslint-plugin-import": "^2.2.0",
