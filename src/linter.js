@@ -6,10 +6,10 @@ import debug from 'debug';
 import * as rulesDict from './rules';
 import { Scheme } from './data';
 
-const dbg = debug('linter');
+const dbg = debug('sqllint:linter');
 
 export default class Linter {
-  constructor(config) {
+  constructor(config = {}) {
     function initRules(rules = {}) {
       return _.reduce(rules, (result, ruleParams, ruleName) => {
         const fn = rulesDict[ruleName] !== undefined ? rulesDict[ruleName](ruleParams) : undefined;
@@ -21,7 +21,6 @@ export default class Linter {
       }, []);
     }
 
-    this.config = config || {};
     this.rules = initRules(config.rules);
   }
 
@@ -38,7 +37,7 @@ export default class Linter {
     // FIXME check all SQLs statements
     const ast = parsed.query[0].SelectStmt;
 
-    console.log(util.inspect(ast, { showHidden: true, depth: null }));
+    dbg(util.inspect(ast, { showHidden: true, depth: null }));
 
     const scheme = schemeInput === undefined ? undefined : new Scheme(schemeInput);
     return _.reduce(this.rules, (result, rule) => {

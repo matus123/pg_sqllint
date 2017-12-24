@@ -1,12 +1,10 @@
-import { expect } from 'chai';
-
-import Linter from '../../lib/linter';
-import scheme from '../schemas/schemeA';
+import Linter from '../../src/linter';
+import scheme from '../mocks/schemas/schemeA';
 
 let linter;
 
 describe('TargetListCheck', () => {
-  before((done) => {
+  beforeEach((done) => {
     linter = new Linter({
       rules: {
         targetListCheck: {
@@ -18,7 +16,7 @@ describe('TargetListCheck', () => {
     done();
   });
 
-  after((done) => {
+  afterEach((done) => {
     done();
   });
 
@@ -28,21 +26,21 @@ describe('TargetListCheck', () => {
       it('select', (done) => {
         const query = 'Select * from table_1';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(0);
+        expect(messages).toHaveLength(0);
         done();
       });
 
       it('select using schema', (done) => {
         const query = 'Select * from test.table_1';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(0);
+        expect(messages).toHaveLength(0);
         done();
       });
 
       it('select using schema with alias', (done) => {
         const query = 'Select id, price from test.table_1 a';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(0);
+        expect(messages).toHaveLength(0);
         done();
       });
     });
@@ -51,14 +49,14 @@ describe('TargetListCheck', () => {
       it('subselect in target list', (done) => {
         const query = 'Select *, (select * from table_1) from table_1';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(0);
+        expect(messages).toHaveLength(0);
         done();
       });
 
       it('subselect in from', (done) => {
         const query = 'Select * from (select * from test.table_1 a) t';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(0);
+        expect(messages).toHaveLength(0);
         done();
       });
 
@@ -66,54 +64,54 @@ describe('TargetListCheck', () => {
         const query = `Select *, (select * from (select * from table_2) t) from (select * from test.table_3) t2 
         where (select profit from test.table_2 tt) > 50`;
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(0);
+        expect(messages).toHaveLength(0);
         done();
       });
     });
   });
 
   // warning messages
-  describe('#returns warning messages', () => {
+  describe('#relationCheck, should return warnings', () => {
     describe('#from clause', () => {
       it('select using wrong table', (done) => {
         const query = 'Select * from table_4';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(1);
+        expect(messages).toHaveLength(1);
         done();
       });
 
       it('select using wrong table with schema', (done) => {
         const query = 'Select * from test.table_4';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(1);
+        expect(messages).toHaveLength(1);
         done();
       });
 
       it('select using wrong table with schema and alias', (done) => {
         const query = 'Select * from test.table_4 a';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(1);
+        expect(messages).toHaveLength(1);
         done();
       });
 
       it('select using wrong schema', (done) => {
         const query = 'Select * from test_1.table_1';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(1);
+        expect(messages).toHaveLength(1);
         done();
       });
 
       it('select using wrong schema with alias', (done) => {
         const query = 'Select * from test_1.table_1 a';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(1);
+        expect(messages).toHaveLength(1);
         done();
       });
 
       it('select using wrong schema and wrong table', (done) => {
         const query = 'Select * from test_1.table_4';
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(2);
+        expect(messages).toHaveLength(2);
         done();
       });
     });
@@ -123,7 +121,24 @@ describe('TargetListCheck', () => {
         join (select * from test.table_2) tt2 on tt2.name = tt.name
         join table_5 tt3 on tt3.id = tt.id`;
         const messages = linter.lint(query, scheme);
-        expect(messages).to.have.lengthOf(4);
+        expect(messages).toHaveLength(4);
+        done();
+      });
+    });
+  });
+
+  describe('#targetListCheck, should return warnings', () => {
+    describe('#from clause', () => {
+      it('select using wrong columns', (done) => {
+        const query = 'Select wrong from table_1';
+        const messages = linter.lint(query, scheme);
+        expect(messages).toHaveLength(1);
+        done();
+      });
+      it('select using wrong columns with alias', (done) => {
+        const query = 'Select wrong as unknown from table_1';
+        const messages = linter.lint(query, scheme);
+        expect(messages).toHaveLength(1);
         done();
       });
     });

@@ -9,7 +9,7 @@ export default class Scheme {
     this.databaseName = databaseName;
     this.schemaName = schemaName;
     this.tables = _.reduce(tables, (result, table) => (
-        Object.assign({}, result, { [table.tableName]: new Table(table) })
+      Object.assign({}, result, { [table.tableName]: new Table(table) })
     ), {});
   }
 

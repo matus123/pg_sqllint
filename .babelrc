@@ -1,5 +1,19 @@
 {
+  "presets": [
+    [
+      "env",
+      {
+        "targets": {
+          "node": "current"
+        },
+        "modules": false,
+        "debug": false
+      }
+    ]
+  ],
   "plugins": [
     "transform-es2015-modules-commonjs"
-  ]
+  ],
+  "sourceMaps": "inline",
+  "retainLines": true
 }

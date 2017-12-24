@@ -9,7 +9,6 @@ class Table {
       Object.assign({}, result, { [column.columnName]: new Column(column) })
     ), {});
   }
-
 }
 
 module.exports = Table;
