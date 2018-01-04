@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import debug from 'debug';
+import * as debug from 'debug';
+import * as _ from 'lodash';
 
+import { IError } from '../../interfaces';
 import CONSTS from './constants';
-import MessageError from '../../data/error';
 
 const has = Object.prototype.hasOwnProperty;
 

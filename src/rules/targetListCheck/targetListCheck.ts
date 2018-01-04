@@ -4,12 +4,13 @@ import debug from 'debug';
 
 import { relationCheck } from '../../common';
 import { mergeScopes, generateAliasedScope, getTargetList, validateTargetList } from './helpers';
+import { IError } from '../../interfaces';
 
 const has = Object.prototype.hasOwnProperty;
 
 const dbg = debug('sqllint:targetCheck');
 
-export default function targetListCheck({ status }) {
+export default function targetListCheck({ status }: {status: string}) {
   return function targetListCheckImpl({ ast, scheme }) {
     let errors = [];
 

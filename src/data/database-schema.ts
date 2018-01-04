@@ -27,3 +27,13 @@ export default class Scheme {
     return this.tables[tableName];
   }
 }
+
+
+// class Table {
+//   constructor({ tableName, columns }) {
+//     this.tableName = tableName;
+//     this.columns = _.reduce(columns, (result, column) => (
+//       Object.assign({}, result, { [column.columnName]: new Column(column) })
+//     ), {});
+//   }
+// }

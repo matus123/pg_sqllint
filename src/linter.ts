@@ -1,16 +1,18 @@
-import _ from 'lodash';
+import * as debug from 'debug';
+import * as _ from 'lodash';
 import * as Parser from 'pg-query-parser';
-import util from 'util';
-import debug from 'debug';
+import * as util from 'util';
 
-import * as rulesDict from './rules';
-import { Scheme } from './data';
+import { IError, ILinterConfig, IRule, IRuleOptions, StatusType } from './interfaces';
+import rulesDict from './rules';
 
 const dbg = debug('sqllint:linter');
 
 export default class Linter {
-  constructor(config = {}) {
-    function initRules(rules = {}) {
+  private rules: Array<() => void>;
+
+  constructor(config: ILinterConfig = {}) {
+    function initRules(rules?: IRuleOptions) {
       return _.reduce(rules, (result, ruleParams, ruleName) => {
         const fn = rulesDict[ruleName] !== undefined ? rulesDict[ruleName](ruleParams) : undefined;
         if (!fn) {
@@ -24,13 +26,13 @@ export default class Linter {
     this.rules = initRules(config.rules);
   }
 
-  lint(query, schemeInput) {
+  public lint(query: string, schemeInput): IError[] {
     const parsed = Parser.parse(query);
     if (parsed.error) {
       return [{
-        status: 'ERROR',
         location: parsed.error.cursorPosition,
         message: parsed.error.toString(),
+        status: StatusType.ERROR,
       }];
     }
 

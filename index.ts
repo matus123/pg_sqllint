@@ -10,7 +10,6 @@ const config = {
 
 const linter = new Linter(config);
 
-
 const SS = `
 Select * from table_1
 `;
@@ -19,7 +18,7 @@ Select * from table_1
 // `;
 
 const SQLquery = `
-SELECT c.output122, c.output11 as output2, t2.output22 output3 
+SELECT c.output122, c.output11 as output2, t2.output22 output3
 FROM (select * from test_schema.test_table t1) c
 LEFT JOIN test_table2 t2 on t2.id = c.id
 LEFT JOIN (SELECT * from test_table3) t3 on t3.id = t2.id
@@ -27,9 +26,8 @@ WHERE (SELECT * FROM test_table4 t4) > 50
 GROUP by c.output1
 HAVING (SELECT * FROM test_table4 t5) > 50`;
 
-
 const SQLquery1 = `
-SELECT c.output1, c.output11 as output2, t2.output22 output3 
+SELECT c.output1, c.output11 as output2, t2.output22 output3
 FROM (select * from test_schema.test_table t1) c
 LEFT JOIN test_table2 t2 on t2.id = c.id
 LEFT JOIN (SELECT * from test_table3) t3 on t3.id = t2.id
